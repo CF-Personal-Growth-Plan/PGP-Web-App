@@ -8,6 +8,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-shell-spawn');
 
   grunt.initConfig({
     clean: {
@@ -59,7 +60,23 @@ module.exports = function(grunt) {
         configFile: 'karma.conf.js',
         singleRus: true,
         browsers: [ 'PhantomJS' ]
-      },
+      }
+    },
+
+    shell: {
+      mongodb: {
+        command: 'mongod',
+        options: {
+          async: true,
+          stdout: false,
+          stderr: true,
+          //set to false to keep from failing if mongodb already running as can happen when a test fails and stops grunt without stoping the database
+          failOnError: false,
+          execOptions: {
+            cwd: '.'
+          }
+        }
+      }
     },
 
     express: {
@@ -93,5 +110,5 @@ module.exports = function(grunt) {
   grunt.registerTask('angulartestwatch', ['angulartest', 'watch:angulartest']);
   grunt.registerTask('test', ['angulartest', 'simplemocha']);
   grunt.registerTask('buildtest', ['test', 'build:dev']);
-  grunt.registerTask('default', ['buildtest', 'watch:express']);
+  grunt.registerTask('default', ['buildtest', 'shell:mongodb', 'watch:express']);
 };
