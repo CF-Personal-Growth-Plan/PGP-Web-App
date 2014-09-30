@@ -108,7 +108,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev', ['clean:dev', 'browserify:dev', 'copy:dev']);
   grunt.registerTask('angulartest', ['browserify:angulartest', 'karma:unit']);
   grunt.registerTask('angulartestwatch', ['angulartest', 'watch:angulartest']);
-  grunt.registerTask('test', ['angulartest', 'simplemocha']);
+  grunt.registerTask('test', ['shell:mongodb', 'angulartest', 'simplemocha']);
   grunt.registerTask('buildtest', ['test', 'build:dev']);
   grunt.registerTask('default', ['buildtest', 'shell:mongodb', 'watch:express']);
 };
